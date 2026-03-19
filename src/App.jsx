@@ -200,7 +200,7 @@ export default function App() {
           WebkitMaskImage: 'radial-gradient(ellipse 82% 78% at 52% 50%, black 30%, rgba(0,0,0,0.45) 55%, transparent 78%)',
           maskImage: 'radial-gradient(ellipse 82% 78% at 52% 50%, black 30%, rgba(0,0,0,0.45) 55%, transparent 78%)',
         }}>
-          <ModelViewer url="/model.glb" />
+          <ModelViewer url={`${import.meta.env.BASE_URL}model.glb`} />
         </div>
       </section>
 
