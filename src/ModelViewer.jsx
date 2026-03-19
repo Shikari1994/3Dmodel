@@ -240,7 +240,10 @@ function Scene({ url, focused, onFocus, onReady, onAssembled }) {
       const { center, dim } = focused
       const dir    = camera.position.clone().sub(center).normalize()
       const fovRad = (camera.fov * Math.PI) / 180
-      const dist   = Math.max((dim / 2) / Math.tan(fovRad / 2) * 3.2, 0.1)
+      const rawDist = (dim / 2) / Math.tan(fovRad / 2) * 3.2
+      // Камера всегда приближается к мешу, никогда не отдаляется
+      const currentDist = camera.position.distanceTo(center)
+      const dist = Math.max(Math.min(rawDist, currentDist * 0.9), 0.1)
       startFly(center.clone().add(dir.multiplyScalar(dist)), center.clone())
     } else {
       // Восстанавливаем лимиты ±15°
