@@ -32,22 +32,12 @@ export default function App() {
         @media (max-width: 768px) {
           .nav-inner { padding: 0 16px !important; }
           .nav-links { display: none !important; }
-          .hero-section {
-            grid-template-columns: 1fr !important;
-            grid-template-rows: auto auto !important;
-            padding: 24px 20px 0 !important;
-            min-height: unset !important;
-            align-items: start !important;
-          }
-          .hero-text { text-align: center; }
-          .hero-text p:first-child { display: none; }
-          .hero-buttons { justify-content: center !important; }
           .hero-model {
-            height: 70vw !important;
-            min-height: 280px !important;
-            max-height: 420px !important;
-            order: 2;
+            height: 60vw !important;
+            min-height: 260px !important;
+            max-height: 400px !important;
           }
+          .hero-text { padding: 32px 20px 60px !important; }
           .stats-section { padding: 32px 16px !important; }
           .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
           .stats-grid > div:nth-child(2) { border-right: none !important; }
@@ -106,29 +96,102 @@ export default function App() {
       <section className="hero-section" style={{
         position: 'relative',
         overflow: 'hidden',
-        minHeight: '100vh',
-        display: 'grid',
-        gridTemplateColumns: 'minmax(0, 520px) 1fr',
-        alignItems: 'center',
-        padding: '80px 0 80px 7vw',
         width: '100%',
       }}>
         {/* Фоновые акценты */}
         <div style={{
-          position: 'absolute', top: '15%', left: '3%',
-          width: '320px', height: '320px', borderRadius: '50%',
+          position: 'absolute', top: '10%', left: '15%',
+          width: '400px', height: '400px', borderRadius: '50%',
           background: 'radial-gradient(circle, rgba(29,163,220,0.08) 0%, transparent 70%)',
-          pointerEvents: 'none',
+          pointerEvents: 'none', zIndex: 0,
         }} />
         <div style={{
-          position: 'absolute', bottom: '10%', left: '30%',
-          width: '200px', height: '200px', borderRadius: '50%',
+          position: 'absolute', top: '8%', right: '15%',
+          width: '250px', height: '250px', borderRadius: '50%',
           background: 'radial-gradient(circle, rgba(226,46,16,0.07) 0%, transparent 70%)',
-          pointerEvents: 'none',
+          pointerEvents: 'none', zIndex: 0,
         }} />
 
-        {/* LEFT: текст */}
-        <div className="hero-text" style={{ position: 'relative', zIndex: 2 }}>
+        {/* 3D модель — на всю ширину */}
+        <div className="hero-model" style={{
+          position: 'relative',
+          width: '100%',
+          height: '85vh',
+          WebkitMaskImage: 'radial-gradient(ellipse 92% 88% at 50% 50%, black 35%, rgba(0,0,0,0.45) 62%, transparent 82%)',
+          maskImage: 'radial-gradient(ellipse 92% 88% at 50% 50%, black 35%, rgba(0,0,0,0.45) 62%, transparent 82%)',
+        }}>
+          <ModelViewer models={[
+            {
+              url: `${import.meta.env.BASE_URL}WPR.glb`,
+              name: 'WPR',
+              explodeConfig: {
+                fastenerNames: ['nut', 'bolt', 'screw', 'hex', 'washer', 'fastener'],
+                fastenerSizeRatio: 0.12,
+                radialPushRatio: 0.18,
+              },
+              // Описания деталей: ключ = точное имя mesh из GLB-файла (видно в поле "id" инфо-панели)
+              parts: {
+                // Пример структуры — заполните после просмотра id деталей в инфо-панели:
+                // 'MeshName': {
+                //   title: 'Название детали',
+                //   description: 'Описание назначения детали в инструменте.',
+                //   specs: [
+                //     { label: 'Материал', value: 'Нержавеющая сталь' },
+                //     { label: 'Рабочее давление', value: 'до 1000 бар' },
+                //   ],
+                // },
+              },
+            },
+            {
+              url: `${import.meta.env.BASE_URL}alternator.glb`,
+              name: 'Пульсатор',
+              initialCamera:  { direction: [0.913, 0.408, 0.005], distance: 4.5 },
+              explodedCamera: { direction: [1.000, 0.002, -0.003], distance: 3.1 },
+              explodeConfig: {
+                explodeStyle: 'plate',
+                spreadRatio: 0.01,
+                bodyRadialRatio: 0,
+                lockedParts: [
+                  ['Цилиндр129', 'Цилиндр129_1', 'Цилиндр129_2', 'Цилиндр129_3', 'Цилиндр129_4', 'Цилиндр129_11', 'Цилиндр129_12'],
+                  ['Цилиндр158', 'Цилиндр158_1'],
+                  ['Цилиндр128', 'Цилиндр129_5', 'Цилиндр129_6', 'Цилиндр129_7', 'Цилиндр129_8', 'Цилиндр129_9', 'Цилиндр129_10', 'Цилиндр128_1', 'Цилиндр128_2', 'Цилиндр128_3', 'Цилиндр128_4', 'Цилиндр134_1', 'Цилиндр134_2', 'Цилиндр134_3', 'Цилиндр134'],
+                  ['Цилиндр162', 'Цилиндр162_4', 'Цилиндр162_1', 'Цилиндр162_2', 'Цилиндр162_3'],
+                  ['Цилиндр156', 'Цилиндр156_2', 'Цилиндр156_1'],
+                  ['Цилиндр132', 'Цилиндр132_2', 'Цилиндр132_1'],
+                ],
+                // partOrder задаёт точный порядок разлёта деталей при разборке.
+                // Используйте имена из поля "id" в инфо-панели (клик на деталь).
+                // Для групп из lockedParts достаточно указать ПЕРВОЕ имя группы.
+                // Пример (раскомментируйте и заполните нужный порядок):
+                // partOrder: [
+                //   'Цилиндр129',  // первая снимаемая деталь — группа 0
+                //   'Цилиндр158',  // вторая                  — группа 1
+                //   'Цилиндр128',  // третья                  — группа 2
+                //   // 'ИмяДетали', // отдельные детали по имени
+                // ],
+              },
+              parts: {
+                // Заполните после просмотра id деталей в инфо-панели.
+                // Ключ — точное имя mesh (поле "id" в инфо-панели при клике на деталь).
+                // Пример:
+                // 'Цилиндр129': {
+                //   title: 'Корпус верхний',
+                //   description: 'Верхняя секция пульсатора. Удаляется первой при разборке.',
+                //   specs: [
+                //     { label: 'Материал', value: 'Нержавеющая сталь' },
+                //   ],
+                // },
+              },
+            },
+          ]} />
+        </div>
+
+        {/* Текст — под моделью, по центру */}
+        <div className="hero-text" style={{
+          position: 'relative', zIndex: 2,
+          textAlign: 'center',
+          padding: '48px 24px 80px',
+        }}>
           <p style={{
             fontSize: '0.68rem', letterSpacing: '0.32em',
             color: 'var(--blue)', marginBottom: '16px',
@@ -155,16 +218,16 @@ export default function App() {
             }}>нового поколения</span>
           </h1>
           <p style={{
-            maxWidth: '420px',
+            maxWidth: '560px',
+            margin: '0 auto 40px',
             color: 'var(--text-muted)',
             fontSize: '1rem',
             lineHeight: 1.72,
-            marginBottom: '40px',
           }}>
             Комплексные решения в области телеметрии и навигации скважин.
             Данные в реальном времени — от забоя до поверхности.
           </p>
-          <div className="hero-buttons" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+          <div className="hero-buttons" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
             <button style={{
               background: 'var(--blue)', color: '#fff',
               border: 'none', padding: '13px 32px',
@@ -191,16 +254,6 @@ export default function App() {
               Контакты
             </button>
           </div>
-        </div>
-
-        {/* RIGHT: 3D модель */}
-        <div className="hero-model" style={{
-          position: 'relative',
-          height: '100vh',
-          WebkitMaskImage: 'radial-gradient(ellipse 82% 78% at 52% 50%, black 30%, rgba(0,0,0,0.45) 55%, transparent 78%)',
-          maskImage: 'radial-gradient(ellipse 82% 78% at 52% 50%, black 30%, rgba(0,0,0,0.45) 55%, transparent 78%)',
-        }}>
-          <ModelViewer url={`${import.meta.env.BASE_URL}model.glb`} />
         </div>
       </section>
 
