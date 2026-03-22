@@ -1,6 +1,8 @@
 import { Suspense, useState, useRef, useEffect } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { OrbitControls, useGLTF, Environment, useProgress, Html } from '@react-three/drei'
+
+useGLTF.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/')
 import * as THREE from 'three'
 
 // ---------- Заглушки характеристик ----------
